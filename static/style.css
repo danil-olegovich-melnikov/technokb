@@ -1,0 +1,46 @@
+@import url('default.css');
+
+
+@media screen and (min-width: 768px) {
+    .navbar-collapse {
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
+    }
+
+    .navbar-nav {
+        flex-direction: row !important;
+        gap: 20px;
+    }
+}
+
+body{
+    padding-top: 58px;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid rgb(0, 0, 0, .5);
+}
+.main-adventage {
+    width: 20%;
+    height: 150px;
+
+}
+
+h3{
+    font-size: 1rem;
+}
+
+.underline {
+    text-decoration: underline!important;
+}
+
+a:hover{
+    color: #dc3545;
+}
+
+.rectangle{
+    width: 100%;
+    height: 150px;
+}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TechnoKB - {{category}} {% endblock %}
+{% block body %}
+    <h1>Продукты</h1>   
+
+    <form method="get">
+        
+        <label for="order">Выберите порядок</label> 
+
+    <select name="order" id="order">
+        <option value="popular">Популярное</option>
+        <option value="new">Новинки</option>
+        <option value="expensive">Дороже</option>
+        <option value="cheaper">Дешевле</option>
+    </select>    
+        <button type="submit">Отправить</button>
+    </form>
+
+        <h2>{{ category }}</h2>
+       
+   
+    {% for product in products %}
+        <li>            
+            <a href="products/{{product.id}}">{{product.name}} {{ product.average_price}} -- рублей</a>
+        </li>
+    {% endfor %}
+    
+
+
+{% endblock %}

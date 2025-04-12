@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}TechnoKB - {{product.name}} {% endblock %}
+{% block body %}
+        <h1>{{product.name}}</h1>
+        <p>{{product.category}}</p>
+        <p>{{product.description}}</p>
+        <p>В наличии {{product.count}}</p>    
+    {% for image in images %}
+        <img src="{{ image.image.url }}" alt="{{ product.name }}" width="200px">
+    {% endfor %}
+{% endblock %}
+    
