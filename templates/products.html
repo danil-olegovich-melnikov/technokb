@@ -1,32 +1,72 @@
 {% extends 'base.html' %}
+{% load mptt_tags %}
+
+
 {% load static %}
 
-{% block title %}TechnoKB - {{category}} {% endblock %}
 {% block body %}
-    <h1>Продукты</h1>   
+<header class="home-header bg-dark text-white py-5">
+    <div class="home-header-container container py-5">
+        <h2 class="small fw-bold text-danger">КОМПЬЮТЕРЫ, НОУТБУКИ, КОМПЛЕКТУЮЩИЕ, АКСЕССУАРЫ</h2>
+        <h1 class="mb-3">Компьютерный магазин<br>в Кара-Балта</h1>
+        <p class="mb-4">Телефон: <a class="underline" href="tel:+96553224265">+96553224265</a></p>
+        <a href="https://wa.me/+996553224265" target="_blank" class="btn btn-danger">Связаться</a>
+    </div>
+</header>
 
-    <form method="get">
-        
-        <label for="order">Выберите порядок</label> 
+<div class="container my-5">
+    <h2>Категории</h2>
+    <p class="mb-0">Выбранная категория: <span class="text-danger">Телефоны</span> <a href=""
+            class="underline"><small>(сбросить)</small></a></p>
 
-    <select name="order" id="order">
-        <option value="popular">Популярное</option>
-        <option value="new">Новинки</option>
-        <option value="expensive">Дороже</option>
-        <option value="cheaper">Дешевле</option>
-    </select>    
-        <button type="submit">Отправить</button>
-    </form>
 
-        <h2>{{ category }}</h2>
-       
-   
-    {% for product in products %}
-        <li>            
-            <a href="products/{{product.id}}">{{product.name}} {{ product.average_price}} -- рублей</a>
+    <ul class="mt-2">
+        {% recursetree categories %}
+        {% if node.total_product_count and node.total_product_count > 0 or not node.is_leaf_node %}
+        <li>
+            {% if not node.is_leaf_node %}
+            <details>
+                <summary>{{ node.name }} ({{ node.total_product_count|default:"0" }})</summary>
+                <ul>
+                    {{ children }}
+                </ul>
+            </details>
+            {% else %}
+            {{ node.name }} ({{ node.total_product_count|default:"0" }})
+            {% endif %}
         </li>
-    {% endfor %}
-    
+        {% endif %}
+        {% endrecursetree %}
+    </ul>
 
+</div>
 
+<div class="container my-5">
+    <div class="d-flex justify-content-between">
+        <h2>Товары</h2>
+        <select class="input select" name="" id="">
+            <option value="">По умолчанию</option>
+            <option value="">Сначала новые</option>
+            <option value="">Сначала дешевле</option>
+            <option value="">Сначала дороже</option>
+        </select>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-3 p-1">
+            <a href="#" class="card">
+                <div class="card-img-top rectangle bg-dark"></div>
+                <div class="card-body">
+                    <h3 class="card-title text-danger mb-0 fw-bold">16 000 сом</h3>
+                    <small class="text-secondary">{{product.category.name}}</small>
+                    <p class="mt-2">{{product.name}}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+
+       
+    </div>
+</div>
 {% endblock %}

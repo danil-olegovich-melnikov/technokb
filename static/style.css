@@ -10,7 +10,7 @@
     .navbar-nav {
         flex-direction: row !important;
         gap: 20px;
-    }
+    }ç
 }
 
 body{
@@ -18,9 +18,11 @@ body{
 }
 .navbar {
     position: fixed;
+    z-index: 999;
     top: 0;
     width: 100%;
     border-bottom: 1px solid rgb(0, 0, 0, .5);
+    box-shadow: 0 0 3px rgb(0, 0, 0, .5);
 }
 .main-adventage {
     width: 20%;
