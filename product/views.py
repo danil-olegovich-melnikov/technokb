@@ -1,9 +1,13 @@
 from django.shortcuts import render,get_object_or_404
 from .models import Product, Category, ProductPhoto
+from review.models import Review
+from django.core.paginator import Paginator
 from django.db.models import Sum
 
-def home(request):    
-    return render(request, "homepage.html")
+def home(request):  
+    reviews = Review.objects.all() [:3]
+    
+    return render(request, "homepage.html",{"reviews": reviews})
 
 
 def products(request):

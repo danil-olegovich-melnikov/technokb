@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}   
+   
+   {% for review in reviews %}
+      <h2>Клиент: {{review.client}} </h2>
+      <img src="{{review.avatar.url}}">
+      <p>Дата: {{review.date}} </p>
+      <p>Райтинг: {{review.raiting}} </p>
+      <p>Комментарии: {{review.comment}} </p>
+      <img src="{{review.image.url}}">
+   {% endfor %}
+   
+   
+
+   
+      
+   
+
+
+{% endblock %}

@@ -27,7 +27,13 @@
 <div class="container my-5">
     <div class="d-flex justify-content-between">
         <h2>Услуги</h2>
-      
+        {% for service in services %}
+            <p>{{service.title}}</p>
+            <p>{{service.category}}</p>
+            <p>{{service.description}}</p>
+            <img src="{{service.image.url}}" width="400">
+            <p>{{service.price}}</p>
+        {% endfor %}
     </div>
 
 </div>
