@@ -1,8 +1,12 @@
-from django.shortcuts import render,get_object_or_404
-from .models import Product, Category, ProductPhoto
-from review.models import Review
+import math
+from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db.models import Sum
+
+from .models import Product, Category, ProductPhoto
+from review.models import Review
+
+
 
 def home(request):  
     reviews = Review.objects.all() [:3]
@@ -11,24 +15,20 @@ def home(request):
 
 
 def products(request):
-    categories = Category.objects.all().annotate(
-        total_product_count=Sum('products__count')
-    )
-    products = Product.objects.filter(is_published = "Да", count__gt = 0) 
-    return render(request, "products.html", {"categories": categories, 'products': products})
-
-
-def productsold(request):
-    # products = Product.objects.all()
-    category_id = request.GET.get('category') 
+    categories = Category.objects.all()
+    products = Product.objects.filter(is_published = "Да", count__gt = 0)
     order = request.GET.get('order')          
-    category = "Все категории"
-    products = Product.objects.filter(is_published = "Да", count__gt = 0) 
+    category = request.GET.get('category')          
+    page = int(request.GET.get('page', 1))          
 
-    if category_id:
-        category = Category.objects.get(id = category_id)
-        products = products.filter(category=category_id)
-
+    if category:
+        category = Category.objects.get(id=category)
+        products = products.filter(category=category)
+    
+    total_products = len(products)
+    count = 8
+    pages = math.ceil(total_products / count)
+    
     if order == "cheaper":        
         products = products.order_by('average_price') 
 
@@ -41,12 +41,31 @@ def productsold(request):
     elif order == "popular":
         products = products.order_by('-amount_of_transaction')
 
-    return render (request, 'products.html', { "products": products, "category": category, "order": order})
+
+    products = products[(page-1) * count : count * page]
+
     
+    return render(
+        request, 
+        "products.html", 
+        {
+            "categories": categories, 
+            'products': products, 
+            'order': order, 
+            'category': 
+            category, 'pages': 
+            range(1, pages+1), 
+            'page': page
+        }
+    )
+
+
 def product(request,id):
     product = Product.objects.get(id = id)
     images =  ProductPhoto.objects.filter(product = product)
-    return render(request, 'product.html', {"product": product, "images": images})
+    products = Product.objects.filter(is_published = "Да", count__gt = 0)[:12]
+
+    return render(request, 'product.html', {"product": product, "images": images, "products": products})
 
 
 def services(request):

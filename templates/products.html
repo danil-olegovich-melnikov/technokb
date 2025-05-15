@@ -5,57 +5,56 @@
 {% load static %}
 
 {% block body %}
-<header class="home-header bg-dark text-white py-5">
-    <div class="home-header-container container py-5">
-        <h2 class="small fw-bold text-danger">КОМПЬЮТЕРЫ, НОУТБУКИ, КОМПЛЕКТУЮЩИЕ, АКСЕССУАРЫ</h2>
-        <h1 class="mb-3">Компьютерный магазин<br>в Кара-Балта</h1>
-        <p class="mb-4">Телефон: <a class="underline" href="tel:+96553224265">+96553224265</a></p>
-        <a href="https://wa.me/+996553224265" target="_blank" class="btn btn-danger">Связаться</a>
-    </div>
-</header>
 
 <div class="container my-5">
     <h2>Категории</h2>
-    <p class="mb-0">Выбранная категория: <span class="text-danger">Телефоны</span> <a href=""
-            class="underline"><small>(сбросить)</small></a></p>
-
+    {% if category %}
+    <p class="mb-0">Выбранная категория: <span class="text-danger">{{category}}</span> <a
+            href="/products{% if order %}?order={{order}}{% endif %}" class="underline"><small>(сбросить)</small></a>
+    </p>
+    {% endif %}
 
     <ul class="mt-2">
         {% recursetree categories %}
-        {% if node.total_product_count and node.total_product_count > 0 or not node.is_leaf_node %}
         <li>
             {% if not node.is_leaf_node %}
-            <details>
-                <summary>{{ node.name }} ({{ node.total_product_count|default:"0" }})</summary>
+            <details class="{% if node.name == 'Услуги'%}d-none{% endif %}">
+                <summary>{{ node.name }}</summary>
                 <ul>
                     {{ children }}
                 </ul>
             </details>
             {% else %}
-            {{ node.name }} ({{ node.total_product_count|default:"0" }})
+            <a href="?category={{node.id}}{% if order %}&order={{order}}{% endif %}">{{ node.name }}</a>
             {% endif %}
         </li>
-        {% endif %}
         {% endrecursetree %}
     </ul>
 
 </div>
+{% if products|length > 1 %}
 
 <div class="container my-5">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center">
         <h2>Товары</h2>
-        <select class="input select" name="" id="">
-            <option value="">По умолчанию</option>
-            <option value="">Сначала новые</option>
-            <option value="">Сначала дешевле</option>
-            <option value="">Сначала дороже</option>
-        </select>
+        <form method="GET">
+            <input type="text" name="category" id="" value="{% if category %}{{category.id}}{% endif %}" hidden>
+
+            <select class="form-control" name="order" onchange="this.form.submit()">
+                <option value="default">По умолчанию</option>
+                <option value="popular" {% if order == "popular" %}selected{% endif %}>Популярные</option>
+                <option value="new" {% if order == "new" %}selected{% endif %}>Сначала новые</option>
+                <option value="cheaper" {% if order == "cheaper" %}selected{% endif %}>Сначала дешевле</option>
+                <option value="expensive" {% if order == "expensive" %}selected{% endif %}>Сначала дороже</option>
+            </select>
+        </form>
+
     </div>
 
     <div class="row">
         {% for product in products %}
         <div class="col-3 p-1">
-            <a href="#" class="card">
+            <a href="/products/{{product.id}}" class="card">
                 <div class="card-img-top rectangle bg-dark"></div>
                 <div class="card-body">
                     <h3 class="card-title text-danger mb-0 fw-bold">16 000 сом</h3>
@@ -65,8 +64,26 @@
             </a>
         </div>
         {% endfor %}
-
-       
     </div>
+    {% else %}
+    <div class="container my-5">
+        <h2>
+            {% if category %}
+            Товаров в данной категории нет,<br>попробуйте другую
+            {% else %}
+            Товары не доступны на данный момент
+            {% endif %}
+        </h2>
+    </div>
+
+    {% endif %}
+    {% if pages|length > 1 %}
+    <div class="container my-5 text-center">
+        {% for i in pages %}
+        <a class="mx-1 {% if i == page %}text-danger{% endif %}"
+            href="?page={{i}}{% if category %}&category={{category.id}}{% endif %}">{{i}}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
