@@ -34,8 +34,17 @@
     </div>
 </section>
 
-
-
+<div>
+    {% for review in reviews %}
+        
+        <h2>Отзывы клиентов</h2>
+        <img src="{{review.avatar.url}}">
+        <p>Клиент: {{review.client}} </p>
+        <p> Дата: {{review.date}} </p>
+        <p>Райтинг: {{review.raiting}} </p>
+        <p> Отзыв: {{review.comment}} </p>
+    {% endfor %}
+</div>
 
 <section class="py-5 container" id="adress">
     <h2>Мы находимся в Кара-Балта</h2>

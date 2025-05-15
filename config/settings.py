@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'client',
     'order',
     'mptt',
+    'review',
+    'service',
    
 ]
 

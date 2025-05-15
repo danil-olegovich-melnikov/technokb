@@ -6,8 +6,27 @@
 
 {% block body %}
 <div class="container my-5">
+    <h2>Услуги</h2>
+    <p class="mb-0">Выбранная категория: <span class="text-danger">Телефоны</span> <a href=""
+            class="underline"><small>(сбросить)</small></a></p>
+
+
+   
+
+</div>
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between">
+        <h2>Услуги</h2>
+        {% for service in services %}
+            <p>{{service.title}}</p>
+            <p>{{service.category}}</p>
+            <p>{{service.description}}</p>
+            <img src="{{service.image.url}}" width="400">
+            <p>{{service.price}}</p>
+        {% endfor %}
+    </div>
     <h2>Категории</h2>
 
-    <h2>Услуги</h2>
 </div>
 {% endblock %}
