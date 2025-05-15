@@ -4,12 +4,59 @@
 
 {% block title %}TechnoKB - {{product.name}} {% endblock %}
 {% block body %}
-        <h1>{{product.name}}</h1>
-        <p>{{product.category}}</p>
-        <p>{{product.description}}</p>
-        <p>В наличии {{product.count}}</p>    
+<div class="container py-5">
+
+    <div>
+        <p>
+            <a href="Продукты">Продукты</a>
+            {% for parent in product.category.get_ancestors %}
+            / {{ parent.name }}
+            {% endfor %}
+            / <a href="/products?category={{product.category.id}}">{{product.category.name}}</a>
+        </p>
+    </div>
+    <h1>{{product.name}}</h1>
+    <p class="text-secondary small">В наличии: {{product.count}} шт</p>
+    <div class="rectangle bg-dark h-25"></div>
+
+
     {% for image in images %}
-        <img src="{{ image.image.url }}" alt="{{ product.name }}" width="200px">
+    <img src="{{ image.image.url }}" alt="{{ product.name }}" width="200px">
     {% endfor %}
+
+    <p class="mt-3">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci laborum cumque illo nulla in quas. Optio ab
+        facilis excepturi nemo dolorum dolorem porro dignissimos laudantium fugit, molestias quidem aspernatur mollitia.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia modi repellat ducimus distinctio maiores
+        libero voluptates, magni quisquam inventore dolorem nam, reiciendis magnam atque, quae suscipit esse provident
+        excepturi quaerat!
+    </p>
+    <hr>
+    <h2 class="h4">Дополнительно: </h2>
+    <ul>
+        <li>📍 Адрес: <a href="/#adress" class="text-danger">Кара-Балта, Карла Маркса 21</a></li>
+        <li>✅ 14 дней гарантия</li>
+        <li>🚚 Доставка по Кыргызстану</li>
+        <li>💰 Скидки при оптовых покупках</li>
+        <li>📝 Система лояльности для постоянных клиентов</li>
+    </ul>
+
+    <h2 class="h4 mt-5">Смотрите похожее</h2>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-3 p-1">
+            <a href="/products/{{product.id}}" class="card">
+                <div class="card-img-top rectangle bg-dark"></div>
+                <div class="card-body">
+                    <h3 class="card-title text-danger mb-0 fw-bold">16 000 сом</h3>
+                    <small class="text-secondary">{{product.category.name}}</small>
+                    <p class="mt-2">{{product.name}}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
 {% endblock %}
-    
