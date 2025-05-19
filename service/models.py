@@ -18,7 +18,7 @@ class Service(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Категория")
     description = models.TextField("описание")
     image = models.ImageField("Фотография",upload_to="service", blank=True, null=True)
-    price = models.FloatField("Цена")
+    price = models.PositiveSmallIntegerField("Цена")
 
     
     def __str__(self):

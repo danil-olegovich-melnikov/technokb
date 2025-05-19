@@ -22,7 +22,8 @@ class Category(MPTTModel):
 class Product(models.Model):
     name = models.CharField("Названия",max_length=100)
     category = TreeForeignKey(Category,on_delete=models.CASCADE, verbose_name="Категория", related_name="products")
-    description = models.CharField("Описание",max_length=300,blank=True, null=True)    
+    description = models.CharField("Описание",max_length=300,blank=True, null=True)
+    price = models.PositiveSmallIntegerField('Цена продажи', default=0)    
     count = models.PositiveSmallIntegerField("Количество на текущий момент",default=0)
     total_count = models.PositiveBigIntegerField("Общая количество", default=0)
     average_price = models.FloatField("Средняя цена", default=0)

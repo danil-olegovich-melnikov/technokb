@@ -52,9 +52,9 @@ class InStockFilter(admin.SimpleListFilter):
 class ProductAdmin(admin.ModelAdmin):
     
     inlines = [AdminPhoto,TransactionAdmin]    
-    list_display = ('name','category','count','in_stock','is_published','created_at','amount_of_transaction',)
+    list_display = ('name','category','count','in_stock','is_published','created_at','amount_of_transaction')
     search_fields = ('name',)
-    list_filter = (('category',TreeRelatedFieldListFilter),InStockFilter,)   
+    list_filter = (('category',TreeRelatedFieldListFilter),InStockFilter, 'is_published')   
     ordering = ('name',)
     readonly_fields = ('count','average_price','total_count','in_stock','created_at','amount_of_transaction',)
     autocomplete_fields = ('category',) 

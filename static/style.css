@@ -47,7 +47,6 @@ a:hover {
 
 .rectangle {
     width: 100%;
-    height: 150px;
 }
 
 .h-25 {
@@ -75,4 +74,21 @@ a:hover {
 
 .home-header {
     padding: 120px 0;
+}
+
+.product-cover {
+    position: relative;
+    height: 400px;
+
+}
+
+.product_cover-full{
+    height: 600px !important;
+}
+.product-cover-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }

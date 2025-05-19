@@ -65,7 +65,7 @@ def product(request,id):
     images =  ProductPhoto.objects.filter(product = product)
     products = Product.objects.filter(is_published = "Да", count__gt = 0)[:12]
 
-    return render(request, 'product.html', {"product": product, "images": images, "products": products})
+    return render(request, 'product.html', {"product": product, "images": images[1:], 'cover': images[0] if images else None, "products": products})
 
 
 def services(request):

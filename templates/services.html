@@ -6,27 +6,40 @@
 
 {% block body %}
 <div class="container my-5">
-    <h2>Услуги</h2>
-    <p class="mb-0">Выбранная категория: <span class="text-danger">Телефоны</span> <a href=""
-            class="underline"><small>(сбросить)</small></a></p>
+    <h1 class="text-center mb-4 h2">Ремонт, настройка и обслуживание</h1>
+    <div class="my-2">
+        {% for category in categories %}
+        <a class="btn mr-2 {% if category.id == selected_category %}btn-danger {% else %}btn-light{% endif %}"
+            href="?category={{category.id}}">{{category}}</a>
+        {% endfor %}
+    </div>
+    {% for service in services %}
 
+    <div class="card p-2">
+        <div class="row justify-content-between card-body">
+            <div class="col-6 bg-dark" style="height: 300px;">
 
-   
+            </div>
+            <div class="col-6  ps-4">
+                <h2 class="h4">{{service.title}}</h2>
+                <p class="text-secondary"><small>{{service.category}}</small></p>
+                <p>{{service.description}}</p>
+                <p class="btn btn-warning">{{service.price}} сом</p>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+
 
 </div>
 
-<div class="container my-5">
-    <div class="d-flex justify-content-between">
-        <h2>Услуги</h2>
-        {% for service in services %}
+<!-- {% for service in services %}
             <p>{{service.title}}</p>
             <p>{{service.category}}</p>
             <p>{{service.description}}</p>
-            <img src="{{service.image.url}}" width="400">
             <p>{{service.price}}</p>
-        {% endfor %}
-    </div>
-    <h2>Категории</h2>
+        {% endfor %} -->
 
-</div>
+
 {% endblock %}
