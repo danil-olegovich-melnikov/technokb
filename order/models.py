@@ -5,6 +5,7 @@ from client.models import Client
 
 class Order(models.Model):    
     client = models.ForeignKey(Client,on_delete=models.SET_NULL, verbose_name="Клиент", blank=True, null=True)
+    
     image = models.ImageField("Фотография",upload_to="product", blank=True, null=True)
 
 

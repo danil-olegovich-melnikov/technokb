@@ -59,6 +59,9 @@ class Transaction(models.Model):
     price = models.FloatField("Цена")
     created_at = models.DateTimeField("Дата",auto_now_add=True)
     order = models.ForeignKey(Order,verbose_name="Заказ", on_delete=models.CASCADE, blank=True, null=True)
+
+    
+    
     
     def __str__(self):
         return f"{self.action} {self.product.name}, количество: {self.count}, цена: {self.price}"

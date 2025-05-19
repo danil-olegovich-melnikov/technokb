@@ -20,9 +20,10 @@ class Client(models.Model):
     city = models.ForeignKey(City,on_delete=models.CASCADE, verbose_name="Место проживание")
     profit = models.FloatField("Общая сумма выкупа",default=0,)
     telephone = models.PositiveBigIntegerField("номер телефона", blank=True, null=True)
+    
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f" 0{self.telephone} {self.first_name} {self.last_name} "
     
  
 
