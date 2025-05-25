@@ -4,6 +4,13 @@ from django.dispatch import receiver
 from order.models import Order
 from mptt.models import MPTTModel, TreeForeignKey
 # Create your models here.
+
+STATUS = (
+    ('Не указано', 'Не указано'),
+    ('Новый', 'Новый'),
+    ('БУ', 'БУ')
+)
+
 class Category(MPTTModel):
     name = models.CharField("Названия",max_length=100)
     parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
@@ -21,6 +28,7 @@ class Category(MPTTModel):
 
 class Product(models.Model):
     name = models.CharField("Названия",max_length=100)
+    status = models.CharField('Статус', choices=STATUS, default='Не указано', max_length=15)
     category = TreeForeignKey(Category,on_delete=models.CASCADE, verbose_name="Категория", related_name="products")
     description = models.TextField("Описание", blank=True, null=True)
     price = models.PositiveSmallIntegerField('Цена продажи', default=0)    
