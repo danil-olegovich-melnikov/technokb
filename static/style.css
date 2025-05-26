@@ -97,3 +97,7 @@ a:hover {
     object-fit: cover;
     object-position: center;
 }
+
+.text-pre-wrap {
+  white-space: pre-wrap;
+}
