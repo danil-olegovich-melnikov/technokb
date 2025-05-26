@@ -9,7 +9,7 @@
     <h1 class="text-center mb-4 h2">Ремонт, настройка и обслуживание</h1>
     <div class="my-2">
         {% for category in categories %}
-        <a class="btn mr-2 {% if category.id == selected_category %}btn-danger {% else %}btn-light{% endif %}"
+        <a class="btn mr-2 mb-2 {% if category.id == selected_category %}btn-danger {% else %}btn-light{% endif %}"
             href="?category={{category.id}}">{{category}}</a>
         {% endfor %}
     </div>
@@ -18,7 +18,9 @@
     <div class="card p-2">
         <div class="row justify-content-between card-body">
             <div class="col-6 bg-dark" style="height: 300px;">
-
+                {% if service.image %}
+                    <img class="w-100 h-100 service__image" src="{{service.image.url}}" alt="">
+                {% endif %}
             </div>
             <div class="col-6  ps-4">
                 <h2 class="h4">{{service.title}}</h2>
