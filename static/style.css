@@ -95,4 +95,5 @@ a:hover {
 
 .service__image{
     object-fit: cover;
+    object-position: center;
 }
