@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="my-2">
+        <a href="?action=Уход{% if month %}&month={{month}}{% endif %}"
+            class="mr-1 mb-1 btn btn-sm {% if action == 'Уход' %}btn-danger {% else %}btn-light{% endif %}">Продажи</a>
+
+        <a href="?action=Приход{% if month %}&month={{month}}{% endif %}"
+            class="mr-1 mb-1 btn btn-sm {% if action == 'Приход' %}btn-danger {% else %}btn-light{% endif %}">Вложения</a>
+    </div>
+    <div class="my-2">
+        <a href="{% if action %}?action={{action}}{% endif %}"
+            class="mr-1 mb-1 btn btn-sm {% if not month %}btn-danger {% else %}btn-light{% endif %}">Общее</a>
+        {% for m in monthes %}
+        <a href="?month={{m}}{% if action %}&action={{action}}{% endif %}"
+            class="mr-1 mb-1 btn btn-sm {% if m == month %}btn-danger {% else %}btn-light{% endif %}">{{m}}</a>
+        {% endfor%}
+    </div>
+
+
+    <h2 class="h6">Общая сумма: {{total}} сом</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Категория</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in total_by_category_top %}
+            {% if category.total_sales %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td>{{ category.total_sales }} сом</td>
+            </tr>
+            {% endif %}
+            {% empty %}
+            <tr>
+                <td colspan="2">Нет данных</td>
+            </tr>
+            {% endfor %}
+            {% if total_by_category_rest %}
+            <tr>
+                <td>Другое</td>
+                <td>{{ total_by_category_rest}} сом</td>
+            </tr>
+            {% endif%}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

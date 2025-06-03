@@ -1,11 +1,12 @@
 import math
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.db.models import Sum
+from django.db.models import F, Sum, ExpressionWrapper, Q, PositiveBigIntegerField
+from datetime import datetime, timedelta
 
-from .models import Product, Category, ProductPhoto
+from .models import Product, Category, ProductPhoto, Transaction
 from review.models import Review
-
+from .utils.balance import get_balance
 
 
 def home(request):  
@@ -71,7 +72,51 @@ def product(request,id):
 def services(request):
     return render(request, "services.html")
 
+def statistics(request):
+    month = request.GET.get('month')
+    action = request.GET.get('action', 'Уход')
+    # Общий фильтр по action и дате (если есть month)
+    transaction_filter = Q(action=action)
+    category_filter = Q(products__transaction__action=action)
 
+    if month:
+        start_date = datetime.strptime(month, "%m.%Y")
+        end_date = (start_date + timedelta(days=32)).replace(day=1)
+        transaction_filter &= Q(created_at__gte=start_date, created_at__lt=end_date)
+        category_filter &= Q(products__transaction__created_at__gte=start_date, products__transaction__created_at__lt=end_date)
+
+    # Общая сумма продаж за период
+    total = Transaction.objects.filter(transaction_filter).aggregate(
+        total=Sum(
+            ExpressionWrapper(F('count') * F('price'), output_field=PositiveBigIntegerField())
+        )
+    )['total'] or 0
+
+    # Продажи по категориям за период
+    total_by_category = Category.objects.annotate(
+        total_sales=Sum(
+            ExpressionWrapper(
+                F('products__transaction__count') * F('products__transaction__price'),
+                output_field=PositiveBigIntegerField()
+            ),
+            filter=category_filter
+        )
+    ).order_by('-total_sales')
+
+    total_by_category_top = total_by_category[:10]
+    total_by_category_rest = sum(category.total_sales for category in total_by_category[10:] if category.total_sales)
+
+    monthes = [date.strftime('%m.%Y') for date in Transaction.objects.dates('created_at', 'month', order='DESC')]
+
+    # balance = get_balance()
+    # print(balance)
+
+
+    return render(
+        request, 
+        "statistics.html", 
+        locals(),
+    )
    
     
     
