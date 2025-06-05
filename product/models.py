@@ -3,6 +3,8 @@ from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
 from order.models import Order
 from mptt.models import MPTTModel, TreeForeignKey
+from django.db.models import F, Sum, ExpressionWrapper, FloatField
+
 # Create your models here.
 
 STATUS = (
@@ -39,7 +41,18 @@ class Product(models.Model):
     created_at = models.DateTimeField("Дата",auto_now_add=True)
     amount_of_transaction = models.PositiveSmallIntegerField("Количество транзакций", default=0)
     is_published = models.CharField("Опубликовано", default="Нет", max_length=3, choices=(("Да","Да"),("Нет","Нет")))
-   
+    
+    @property
+    def invested(self):
+        transactions = self.transaction_set.filter(action=Transaction.COMING)
+
+        total_amount = transactions.annotate(
+            total_price=ExpressionWrapper(F('count') * F('price'), output_field=FloatField())
+        ).aggregate(
+            total_amount=Sum('total_price'),
+        )['total_amount']
+        return total_amount - self.average_price * (self.total_count - self.count)
+
     def __str__(self):
         return f"{self.name}"
     

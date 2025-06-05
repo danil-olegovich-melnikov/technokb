@@ -108,8 +108,14 @@ def statistics(request):
 
     monthes = [date.strftime('%m.%Y') for date in Transaction.objects.dates('created_at', 'month', order='DESC')]
 
-    # balance = get_balance()
-    # print(balance)
+    products = Product.objects.filter(count__gt=0)
+    total_invested_today = 0
+
+    for p in products:
+        p.invested_amount = p.invested
+        total_invested_today += p.invested_amount
+
+    sorted_products = sorted(products, key=lambda p: p.invested_amount, reverse=True)
 
 
     return render(
