@@ -52,8 +52,20 @@
 </div>
 
 <div class="container my-5">
-    <h2>Баланс - {{total_invested_today|floatformat:0}} cом</h2>
-    <table class="table">
+    <div class="form-inline mb-2 d-flex justify-content-spacebetween">
+        <h2 class="w-100">Баланс - {{total_invested_today|floatformat:0}} cом</h2>
+
+        <select id="balanceLimitSelect" class="">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="all">Все</option>
+        </select>
+    </div>
+
+    <table class="table" id="balanceTable">
         <thead>
             <tr>
                 <th>Название</th>
@@ -61,14 +73,95 @@
                 <th>Сумма</th>
             </tr>
         </thead>
-        {% for p in sorted_products %}
-        <tr>
-            <td>{{p.name}}</td>
-            <td>{{p.count}}</td>
-            <td>{{p.invested_amount|floatformat:0}}</td>
-        </tr>
-        {% endfor %}
+        <tbody>
+            {% for p in sorted_products %}
+            <tr>
+                <td>{{p.name}}</td>
+                <td>{{p.count}}</td>
+                <td>{{p.invested_amount|floatformat:0}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-
 </div>
+
+
+<div class="container my-5">
+
+    <div class="form-inline mb-2 d-flex justify-content-spacebetween">
+        <h2 class="w-100">Заработок - {{total_icnome}} cом</h2>
+
+        <select id="recordLimit" class="">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="all">Все</option>
+        </select>
+    </div>
+
+    <table class="table" id="transactionsTable">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+            <tr>
+                <td>{{t.product.name}}</td>
+                <td>{{t.count}}</td>
+                <td>{{t.income|floatformat:0}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const limitSelect = document.getElementById('recordLimit');
+        const tableRows = document.querySelectorAll('#transactionsTable tbody tr');
+
+        function updateVisibleRows() {
+            let limit = limitSelect.value;
+            tableRows.forEach((row, index) => {
+                if (limit === 'all' || index < parseInt(limit)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        limitSelect.addEventListener('change', updateVisibleRows);
+        updateVisibleRows(); // initial call
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        function initRowLimiter(selectId, tableId) {
+            const limitSelect = document.getElementById(selectId);
+            const tableRows = document.querySelectorAll(`#${tableId} tbody tr`);
+
+            function updateVisibleRows() {
+                const limit = limitSelect.value;
+                tableRows.forEach((row, index) => {
+                    if (limit === 'all' || index < parseInt(limit)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            limitSelect.addEventListener('change', updateVisibleRows);
+            updateVisibleRows(); // initial
+        }
+
+        initRowLimiter('recordLimit', 'transactionsTable');
+        initRowLimiter('balanceLimitSelect', 'balanceTable');
+    });
+</script>
+
 {% endblock %}

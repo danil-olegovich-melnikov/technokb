@@ -117,6 +117,17 @@ def statistics(request):
 
     sorted_products = sorted(products, key=lambda p: p.invested_amount, reverse=True)
 
+    transactions = Transaction.objects.filter(action=Transaction.LEAVING)
+    not_zero_transactions = []
+    total_icnome = 0
+
+    for t in transactions:
+        t.income = t.get_income()
+        total_icnome += t.income
+
+    transactions = filter(lambda t: t.income != 0, transactions)
+    transactions = sorted(transactions, key=lambda t: t.income, reverse=True)
+
 
     return render(
         request, 

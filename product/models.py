@@ -85,6 +85,9 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.action} {self.product.name}, количество: {self.count}, цена: {self.price}"
 
+    def get_income(self):
+        return self.price * self.count - self.product.average_price * self.count 
+
     class Meta:
         verbose_name = "транзакция"
         verbose_name_plural = "Транзакции"
