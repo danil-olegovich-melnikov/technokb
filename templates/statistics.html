@@ -69,6 +69,7 @@
         <thead>
             <tr>
                 <th>Название</th>
+                <th>Катеория</th>
                 <th>Количество</th>
                 <th>Сумма</th>
             </tr>
@@ -77,6 +78,7 @@
             {% for p in sorted_products %}
             <tr>
                 <td>{{p.name}}</td>
+                <td>{{p.category.name}}</td>
                 <td>{{p.count}}</td>
                 <td>{{p.invested_amount|floatformat:0}}</td>
             </tr>
@@ -105,6 +107,7 @@
         <thead>
             <tr>
                 <th>Название</th>
+                <td>{{p.category.name}}</td>
                 <th>Количество</th>
                 <th>Сумма</th>
             </tr>

@@ -33,7 +33,7 @@
         </div>
     </div>
 </section>
-<section class="reviews container py-5">
+<!-- <section class="reviews container py-5">
     <h2 class="text-center mb-4">Наши клиенты довольны нашей техникой</h2>
     <div class="row reviews-container">
         {% for review in reviews %}
@@ -61,19 +61,19 @@
         {% endfor %}
 
     </div>
-</section>
+</section> -->
 
 <section class="py-5 container" id="adress">
     <h2>Мы находимся в Кара-Балта</h2>
     <p>Карла Маркса 21, 2 этаж</p>
-    <div class="bg-secondary" style="height: 20vh">
+    <div class="bg-secondary" style="height: 300px">
         <iframe
             src="https://yandex.ru/map-widget/v1/?um=constructor%3Acf2f97d890032d5835727698a1acaeea37640c1c7d38bfe1d4f510d211d1b630&amp;source=constructor"
             width="100%" height="100%" frameborder="0"></iframe>
     </div>
 </section>
 <section class="license bg-light text-center py-5">
-    <div class="container">
+    <div class="container py-4">
         <h2 class="mb-4">Свидетельство<br><small>о государственной регистрации</small></h2>
         <a class="btn btn-outline-danger btn-small" href="">Просмотр</a>
 
@@ -81,13 +81,7 @@
 </section>
 <footer class="footer bg-dark text-white text-center p-1">
     <div class="container">
-        TecnoKB
+        TechnoKB
     </div>
 </footer>
-<!-- <div class="container">
-    <h1>Главная страница</h1>
-    {% for category in categories %}
-    <a href="/products?category={{ category.id }}">{{category.name}}</a>
-    {% endfor %}
-</div> -->
 {% endblock %}

@@ -17,6 +17,11 @@
 body {
     padding-top: 58px;
 }
+pre {
+  white-space: pre-wrap;       
+  /* word-break: break-all;       */
+  overflow-wrap: break-word; 
+}
 
 .navbar {
     position: fixed;
@@ -101,3 +106,4 @@ a:hover {
 .text-pre-wrap {
   white-space: pre-wrap;
 }
+

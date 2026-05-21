@@ -8,6 +8,8 @@
 <div class="container my-5">
     <h1 class="text-center mb-4 h2">Ремонт, настройка и обслуживание</h1>
     <div class="my-2">
+    <a class="btn mr-2 mb-2 {% if not selected_category %}btn-danger {% else %}btn-light{% endif %}"
+            href="?">Все</a>        
         {% for category in categories %}
         <a class="btn mr-2 mb-2 {% if category.id == selected_category %}btn-danger {% else %}btn-light{% endif %}"
             href="?category={{category.id}}">{{category}}</a>
@@ -17,16 +19,16 @@
 
     <div class="card p-2">
         <div class="row justify-content-between card-body">
-            <div class="col-6 bg-dark p-0" style="height: 300px;">
+            <div class="col-12 col-md-6 col-lg-4 bg-dark p-0">
                 {% if service.image %}
                     <img class="w-100 h-100 service__image" src="{{service.image.url}}" alt="">
                 {% endif %}
             </div>
-            <div class="col-6  ps-4">
+            <div class="col-12 col-md-6 col-lg-8  ps-0 ps-md-4 mt-4 mt-md-0">
                 <h2 class="h4">{{service.title}}</h2>
                 <p class="text-secondary"><small>{{service.category}}</small></p>
-                <p>{{service.description}}</p>
-                <p class="btn btn-warning">{{service.price}} сом</p>
+                <pre>{{service.description}}</pre>
+                <p class="btn btn-light">{{service.price}} сом</p>
             </div>
 
         </div>

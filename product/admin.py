@@ -23,7 +23,9 @@ class AdminPhoto(admin.TabularInline):
 
 
 class CategoryAdmin(MPTTModelAdmin):
-    list_display = ('name','parent')
+    list_display = ('id', 'name', 'parent')
+    list_editable = ('name', 'parent')
+    list_display_links = ('id',)
     list_filter = (('parent', admin.RelatedFieldListFilter),)
     search_fields = ('name',)
 

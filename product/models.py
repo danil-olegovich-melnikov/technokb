@@ -70,10 +70,12 @@ class ProductPhoto(models.Model):
 
 class Transaction(models.Model):
     COMING = "Приход"
+    TRANSFER = "Переход"
     LEAVING = "Уход"
     ACTION = [
         (COMING,'Приход'),
         (LEAVING,'Уход'),
+        (TRANSFER, "Переход"),
     ]
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт")
     action = models.CharField("Действие",max_length=10, choices=ACTION)
@@ -109,7 +111,7 @@ def update_product_count(instance):
             product.total_count += transaction.count
             product.count += transaction.count
             
-        if transaction.action == transaction.LEAVING:
+        if transaction.action == transaction.LEAVING or transaction.action == transaction.TRANSFER:
             product.count -= transaction.count
             product.amount_of_transaction += 1     
 
