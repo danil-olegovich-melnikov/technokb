@@ -13,9 +13,19 @@
         gap: 20px;
     }
 }
+html, body {
+    height: 100%;
+    margin: 0;
+}
 
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     padding-top: 58px;
+}
+main {
+  flex: 1;
 }
 pre {
   white-space: pre-wrap;       
@@ -92,7 +102,6 @@ a:hover {
 }
 .product-cover-img {
     position: absolute;
-    width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
@@ -107,3 +116,17 @@ a:hover {
   white-space: pre-wrap;
 }
 
+
+.zoom-image {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.zoom-image:hover {
+    opacity: 0.8;
+}
+
+.modal-content {
+    background: transparent;
+    border: none;
+}

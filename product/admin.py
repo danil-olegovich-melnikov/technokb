@@ -1,7 +1,6 @@
 from django.contrib import admin
 from product.models import Category,Product,Transaction,ProductPhoto
 from django.utils.translation import gettext_lazy as _
-from mptt.admin import MPTTModelAdmin,TreeRelatedFieldListFilter
 from django.shortcuts import redirect
 from urllib.parse import urlencode
 
@@ -11,22 +10,24 @@ admin.site.site_header = 'Администрация TechnoKB'
 admin.site.index_title = 'Наши модели'
 admin.site.site_title = 'Продукты - Административная панель'
 
+
 class TransactionAdmin(admin.TabularInline):
     model = Transaction
     list_display = ('created_at',)
     readonly_fields = ('created_at',)  
     extra = 1  
 
+
 class AdminPhoto(admin.TabularInline):
     model = ProductPhoto
     extra = 1
 
 
-class CategoryAdmin(MPTTModelAdmin):
-    list_display = ('id', 'name', 'parent')
-    list_editable = ('name', 'parent')
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    # list_editable = ('name', 'parent')
     list_display_links = ('id',)
-    list_filter = (('parent', admin.RelatedFieldListFilter),)
+    # list_filter = (('parent', admin.RelatedFieldListFilter),)
     search_fields = ('name',)
 
 class InStockFilter(admin.SimpleListFilter):
@@ -54,12 +55,13 @@ class InStockFilter(admin.SimpleListFilter):
 class ProductAdmin(admin.ModelAdmin):
     
     inlines = [AdminPhoto,TransactionAdmin]    
-    list_display = ('name','category','count','in_stock','is_published','created_at','amount_of_transaction')
-    search_fields = ('name',)
-    list_filter = (('category',TreeRelatedFieldListFilter),InStockFilter, 'is_published')   
+    list_display = ('name','category','count', 'average_price', 'in_stock','is_published','created_at','amount_of_transaction')
+    search_fields = ('name', 'category__name')
+    list_filter = ('category',InStockFilter, 'is_published')   
     ordering = ('name',)
     readonly_fields = ('count','average_price','total_count','in_stock','created_at','amount_of_transaction',)
     autocomplete_fields = ('category',) 
+    list_editable = ['is_published']
 
     class Meta:
         model = Product

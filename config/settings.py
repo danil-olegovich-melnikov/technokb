@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'mptt',
     'review',
     'service',
-   
 ]
 
 MIDDLEWARE = [
@@ -117,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 

@@ -22,7 +22,7 @@ class Client(models.Model):
     telephone = models.PositiveBigIntegerField("номер телефона", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.telephone} - {self.first_name} {self.last_name}"
     
  
 

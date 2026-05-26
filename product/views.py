@@ -1,5 +1,6 @@
 import math
 from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator
 from django.db.models import F, Sum, ExpressionWrapper, Q, PositiveBigIntegerField
 from datetime import datetime, timedelta
@@ -27,7 +28,7 @@ def products(request):
         products = products.filter(category=category)
     
     total_products = len(products)
-    count = 8
+    count = 9
     pages = math.ceil(total_products / count)
     
     if order == "cheaper":        
@@ -53,9 +54,8 @@ def products(request):
             "categories": categories, 
             'products': products, 
             'order': order, 
-            'category': 
-            category, 'pages': 
-            range(1, pages+1), 
+            'category': category, 
+            'pages': range(1, pages+1), 
             'page': page
         }
     )
@@ -72,6 +72,8 @@ def product(request,id):
 def services(request):
     return render(request, "services.html")
 
+
+@staff_member_required
 def statistics(request):
     month = request.GET.get('month')
     action = request.GET.get('action', 'Уход')

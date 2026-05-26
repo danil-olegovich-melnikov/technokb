@@ -8,38 +8,65 @@
 
     <div>
         <p>
-            <a href="Продукты">Продукты</a>
+            <a href="/products">Продукты</a>
             {% for parent in product.category.get_ancestors %}
             / {{ parent.name }}
             {% endfor %}
             / <a href="/products?category={{product.category.id}}">{{product.category.name}}</a>
         </p>
     </div>
+    <div class="btn btn-warning" style="float: right;">{{product.price}} сом</div>
     <h1>{{product.name}}</h1>
+
     <p class="text-secondary small">В наличии: {{product.count}} шт</p>
-    {% if cover %}
-    <div class="product-cover bg-dark product-cover-full">
-        <img class="product-cover-img" src="{{cover.image.url}}" alt="">
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+            {% if cover %}
+                <div class="product-cover product-cover-full">
+                    <img src="{{cover.image.url}}" class="product-cover-img img-fluid rounded shadow zoom-image" data-toggle="modal" data-target="#imageModal" alt="">
+                </div>
+
+                <div class="modal fade" id="imageModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <img src="{{cover.image.url}}" class="img-fluid rounded" alt="Zoomed">
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {% for image in images %}
+                <img src="{{ image.image.url }}" alt="{{ product.name }}" width="200px">
+            {% endfor %}
+        </div>
+        <div class="col-12 col-md-6 col-lg-8">
+            <p class="text-pre-wrap my-3 my-md-0">{{product.description}}</p>
+            {% if product.description|length < 150  %}
+                <br>
+                ✅ Гарантия: 1 месяц<br>
+                ✅ Официальный чек, имеется налоговая регистрация<br><br>
+                {% if product.price > 5000 %}
+                    🏦 Возможна рассрочка через мплюс или без участия банка<br>
+                    🚚 Бесплатная доставка по Кыргызстану
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
+    {% if product.description|length >= 150 %}
+        ✅ Гарантия: 1 месяц<br>
+        ✅ Официальный чек, имеется налоговая регистрация<br><br>
+        {% if product.price > 5000 %}
+            🏦 Возможна рассрочка через мплюс или без участия банка<br>
+            🚚 Бесплатная доставка по Кыргызстану
+        {% endif %}
     {% endif %}
+    
+
+    
 
 
-    {% for image in images %}
-    <img src="{{ image.image.url }}" alt="{{ product.name }}" width="200px">
-    {% endfor %}
-
-    <p class="text-pre-wrap mt-4">{{product.description}}</p>
-    <hr>
-    <h2 class="h4">Дополнительно: </h2>
-    <ul>
-        <li>📍 Адрес: <a href="/#adress" class="text-danger">Кара-Балта, Карла Маркса 21</a></li>
-        <li>✅ 14 дней гарантия</li>
-        <li>🚚 Доставка по Кыргызстану</li>
-        <li>💰 Скидки при оптовых покупках</li>
-        <li>📝 Система лояльности для постоянных клиентов</li>
-    </ul>
-
-    <h2 class="h4 mt-5">Смотрите похожее</h2>
+    <!-- <h2 class="h4 mt-5">Смотрите похожее</h2> -->
 
     <!-- <div class="row">
         {% for product in products %}

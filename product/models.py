@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
 from order.models import Order
-from mptt.models import MPTTModel, TreeForeignKey
 from django.db.models import F, Sum, ExpressionWrapper, FloatField
 
 # Create your models here.
@@ -13,12 +12,11 @@ STATUS = (
     ('БУ', 'БУ')
 )
 
-class Category(MPTTModel):
+class Category(models.Model):
     name = models.CharField("Названия",max_length=100)
-    parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
 
-    class MPTTMeta:
-        order_insertion_by = ['name']
+    def count_active_products(self):
+        return len(self.products.all().filter(count__gt=0, is_published="Да", in_stock="Да"))
 
     def __str__(self):
         return f"{self.name}"
@@ -31,7 +29,7 @@ class Category(MPTTModel):
 class Product(models.Model):
     name = models.CharField("Названия",max_length=100)
     status = models.CharField('Статус', choices=STATUS, default='Не указано', max_length=15)
-    category = TreeForeignKey(Category,on_delete=models.CASCADE, verbose_name="Категория", related_name="products")
+    category = models.ForeignKey(Category,on_delete=models.CASCADE, verbose_name="Категория", related_name="products")
     description = models.TextField("Описание", blank=True, null=True)
     price = models.PositiveSmallIntegerField('Цена продажи', default=0)    
     count = models.PositiveSmallIntegerField("Количество на текущий момент",default=0)
@@ -40,7 +38,8 @@ class Product(models.Model):
     in_stock = models.CharField("В наличии", default="Нет", max_length=3, choices=(("Да","Да"),("Нет","Нет")))
     created_at = models.DateTimeField("Дата",auto_now_add=True)
     amount_of_transaction = models.PositiveSmallIntegerField("Количество транзакций", default=0)
-    is_published = models.CharField("Опубликовано", default="Нет", max_length=3, choices=(("Да","Да"),("Нет","Нет")))
+    is_published = models.CharField("Статус", default="Нет", max_length=6, choices=(("Да","Опубликовано"),("Нет","Не опубликовано"), ("В пути", "В пути"), ("Резерв", "Резерв")))
+    
     
     @property
     def invested(self):
@@ -54,12 +53,12 @@ class Product(models.Model):
         return total_amount - self.average_price * (self.total_count - self.count)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.category.name} - {self.name}"
     
     class Meta:
         verbose_name = "продукт"
         verbose_name_plural = "Продукты"
-        ordering = ["name"]
+        ordering = ["category", "name"]
 
 class ProductPhoto(models.Model):
     image = models.ImageField("Фотография",upload_to="product", blank=True, null=True)

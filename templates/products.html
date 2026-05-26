@@ -8,32 +8,16 @@
 
 <div class="container my-5">
     <h2>Категории</h2>
-    {% if category %}
-    <p class="mb-0">Выбранная категория: <span class="text-danger">{{category}}</span> <a
-            href="/products{% if order %}?order={{order}}{% endif %}" class="underline"><small>(сбросить)</small></a>
-    </p>
-    {% endif %}
 
-    <ul class="mt-2">
-        {% recursetree categories %}
-        <li>
-            {% if not node.is_leaf_node %}
-            <details class="{% if node.name == 'Услуги'%}d-none{% endif %}">
-                <summary>{{ node.name }}</summary>
-                <ul>
-                    {{ children }}
-                </ul>
-            </details>
-            {% else %}
-            <a href="?category={{node.id}}{% if order %}&order={{order}}{% endif %}">{{ node.name }}</a>
-            {% endif %}
-        </li>
-        {% endrecursetree %}
-    </ul>
+    <a href="?" class="btn btn-sm my-2 {% if not category %}btn-danger{% else %}btn-light{% endif %}">Все категории</a>
+
+    {% for c in categories %}
+        <a href="?category={{c.id}}&order={{order}}" class="btn btn-sm {% if c.count_active_products == 0 %}disabled{% endif %} my-2 {% if c.id == category.id %}btn-danger{% else %}btn-light{% endif %}">{{c.name}} ({{c.count_active_products}})</a>
+    {% endfor %}
 
 </div>
 
-{% if products|length > 1 %}
+{% if products|length > 0 %}
 
 <div class="container my-5">
     <div class="d-flex justify-content-between align-items-center">
@@ -59,7 +43,7 @@
                 <div class="card-img-top bg-dark product-cover">
                     {% with product.productphoto_set.all|first as first_photo %}
                         <img 
-                            class="product-cover-img" 
+                            class="product-cover-img w-100" 
                             src="{% if first_photo.image %}
                                     {{ first_photo.image.url }}
                                     {% else %} {% static 'img/product-default-cover.png' %}
@@ -84,7 +68,7 @@
     <div class="container my-5">
         <h2>
             {% if category %}
-            Товаров в данной категории нет,<br>попробуйте другую
+            Товаров в данной категории нет.<br>Попробуйте выбрать другую категорию
             {% else %}
             Товары не доступны на данный момент
             {% endif %}
@@ -96,7 +80,7 @@
     <div class="container my-5 text-center">
         {% for i in pages %}
         <a class="mx-1 {% if i == page %}text-danger{% endif %}"
-            href="?page={{i}}{% if category %}&category={{category.id}}{% endif %}">{{i}}</a>
+            href="?page={{i}}{% if category %}&category={{category.id}}{% endif %}{% if order %}&order={{order}}{% endif %}">{{i}}</a>
         {% endfor %}
     </div>
     {% endif %}
