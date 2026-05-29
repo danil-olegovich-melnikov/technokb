@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from .models import Product, Category, ProductPhoto, Transaction
 from review.models import Review
 from .utils.balance import get_balance
-
+from equipment.models import Equipment
 
 def home(request):  
     reviews = Review.objects.all() [:3]
@@ -130,6 +130,16 @@ def statistics(request):
     transactions = filter(lambda t: t.income != 0, transactions)
     transactions = sorted(transactions, key=lambda t: t.income, reverse=True)
 
+    equipment_stats = Equipment.objects.aggregate(
+    equipment_total_buy=Sum('buy_price'),
+    equipment_total_sell=Sum('sell_price'),
+)
+
+    equipment_total_buy = equipment_stats['equipment_total_buy'] or 0
+    equipment_total_sell = equipment_stats['equipment_total_sell'] or 0
+    equipment_profit = equipment_total_sell - equipment_total_buy
+
+    equipment_list = Equipment.objects.all().order_by('-buy_price')
 
     return render(
         request, 

@@ -123,6 +123,45 @@
         </tbody>
     </table>
 </div>
+<div class="container my-5">
+      <div class="form-inline mb-2 d-flex justify-content-spacebetween">
+        <div class="w-100">
+            <h2>Оборудование</h2>
+            <p>Всего вложено в оборудование: {{ equipment_total_buy }} сом</p>
+            <p>Можно продать примерно за: {{ equipment_total_sell }} сом</p>
+        </div>
+        <select id="equipment_limit" style="height: 30px;">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="all">Все</option>
+        </select>
+    </div>
+
+
+    <table class="table" id="equipment_limit_table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Куплено за</th>
+                <th>Можно продать за</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in equipment_list %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.buy_price }}</td>
+                <td>{{ item.sell_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const limitSelect = document.getElementById('recordLimit');
@@ -164,6 +203,8 @@
 
         initRowLimiter('recordLimit', 'transactionsTable');
         initRowLimiter('balanceLimitSelect', 'balanceTable');
+        initRowLimiter('equipment_limit', 'equipment_limit_table');
+
     });
 </script>
 
