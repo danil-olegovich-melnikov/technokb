@@ -40,6 +40,7 @@ class EquipmentAdmin(admin.ModelAdmin):
                 "name",
                 "description",
                 "category",
+                'count'
             )
         }),
 
