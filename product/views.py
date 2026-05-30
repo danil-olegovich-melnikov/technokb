@@ -130,10 +130,11 @@ def statistics(request):
     transactions = filter(lambda t: t.income != 0, transactions)
     transactions = sorted(transactions, key=lambda t: t.income, reverse=True)
 
+
     equipment_stats = Equipment.objects.aggregate(
-    equipment_total_buy=Sum('buy_price'),
-    equipment_total_sell=Sum('sell_price'),
-)
+        equipment_total_buy=Sum(F('buy_price') * F('count')),
+        equipment_total_sell=Sum(F('sell_price') * F('count')),
+    )
 
     equipment_total_buy = equipment_stats['equipment_total_buy'] or 0
     equipment_total_sell = equipment_stats['equipment_total_sell'] or 0

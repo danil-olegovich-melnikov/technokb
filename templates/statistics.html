@@ -20,7 +20,7 @@
     </div>
 
 
-    <h2 class="h6">Общая сумма: {{total}} сом</h2>
+    <h2 class="mt-5">Общая сумма: {{total}} сом</h2>
     <table class="table">
         <thead>
             <tr>
@@ -146,6 +146,7 @@
             <tr>
                 <th>Название</th>
                 <th>Категория</th>
+                <th>Количество</th>
                 <th>Куплено за</th>
                 <th>Можно продать за</th>
             </tr>
@@ -155,6 +156,7 @@
             <tr>
                 <td>{{ item.name }}</td>
                 <td>{{ item.category }}</td>
+                <td>{{ item.count }}</td>
                 <td>{{ item.buy_price }}</td>
                 <td>{{ item.sell_price }}</td>
             </tr>
@@ -163,24 +165,6 @@
     </table>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const limitSelect = document.getElementById('recordLimit');
-        const tableRows = document.querySelectorAll('#transactionsTable tbody tr');
-
-        function updateVisibleRows() {
-            let limit = limitSelect.value;
-            tableRows.forEach((row, index) => {
-                if (limit === 'all' || index < parseInt(limit)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-
-        limitSelect.addEventListener('change', updateVisibleRows);
-        updateVisibleRows(); // initial call
-    });
     document.addEventListener('DOMContentLoaded', function () {
         function initRowLimiter(selectId, tableId) {
             const limitSelect = document.getElementById(selectId);
