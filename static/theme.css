@@ -1,0 +1,9 @@
+[data-bs-theme="dark"] .bg-light,
+[data-bs-theme="dark"] .btn-light{
+    background-color: #15171a !important;
+    color: gainsboro !important;
+}
+
+[data-bs-theme="dark"] footer {
+    background-color: #0a0b0c !important;
+}

@@ -1,4 +1,5 @@
 @import url('default.css');
+@import url('theme.css');
 
 
 
@@ -130,3 +131,5 @@ a:hover {
     background: transparent;
     border: none;
 }
+
+

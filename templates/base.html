@@ -5,9 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>{% block title %} ТехноКБ {% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <script src="https://kit.fontawesome.com/0dac904ea8.js" crossorigin="anonymous"></script>
@@ -18,10 +17,27 @@
         <div class="container">
             <a class="navbar-brand fw-bold" href="/"><span class="text-danger">ТЕХНО</span>КБ</a>
 
-            <button class="navbar-toggler d-md-none btn-small" type="button" data-toggle="collapse"
-                data-target="#navbar-collapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+
+            <div class="d-flex align-items-center gap-2">
+                <button
+                    class="navbar-toggler d-md-none"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbar-collapse"
+                    aria-controls="navbar-collapse"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+                <button id="theme-toggle1" class="d-block d-md-none btn btn-outline-secondary">
+                    🌙
+                </button>
+                <a class="d-block d-md-none btn btn-danger px-3"
+                            href="https://wa.me/+996553224265" target="_blank">Связаться</a>
+                
+            </div>
 
             <div class="collapse navbar-collapse d-md-flex justify-content-start" id="navbar-collapse">
                 <ul class="navbar-nav">
@@ -37,9 +53,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/#address">Адрес</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-danger px-3 text-white"
+                    <li class="nav-item d-none d-md-block">
+                        <a class="btn btn-danger px-3"
                             href="https://wa.me/+996553224265" target="_blank">Связаться</a>
+                    </li>
+                    <li class="nav-item">
+                        <button id="theme-toggle2" class="d-none d-md-block btn btn-outline-secondary">
+                            🌙
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -55,15 +76,42 @@
     <footer class="footer bg-dark text-white text-center p-1">
         <div class="container">ТехноКБ</div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        const html = document.documentElement;
+        const btn1 = document.getElementById('theme-toggle1');
+        const btn2 = document.getElementById('theme-toggle2');
+
+        const savedTheme = localStorage.getItem('theme');
+
+        function updateText(theme){
+            btn1.innerText = theme === 'dark' ? '🌙' : '☀️';
+            btn2.innerText = btn1.innerText
+        }
+        
+        if (savedTheme) {
+            html.setAttribute('data-bs-theme', savedTheme);
+            updateText(savedTheme);
+        }
+
+
+
+        function themeChange(){
+            const newTheme = 
+                html.getAttribute('data-bs-theme') === 'dark'
+                    ? 'light'
+                    : 'dark';
+            
+            updateText(newTheme);
+            html.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+        btn1.addEventListener('click', themeChange);
+        btn2.addEventListener('click', themeChange);
+
+</script>
 </body>
 
 </html>
