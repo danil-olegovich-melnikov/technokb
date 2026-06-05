@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class ServiceConfig(AppConfig):
+class SupplierConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'service'
-    verbose_name = '5. Сервисы'
+    name = 'supplier'
+    verbose_name = '1. Приход'

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'mptt',
     'review',
     'service',
+    'supplier',
 ]
 
 MIDDLEWARE = [

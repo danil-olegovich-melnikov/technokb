@@ -3,7 +3,7 @@ from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
 from order.models import Order
 from django.db.models import F, Sum, ExpressionWrapper, FloatField
-
+from supplier.models import SuplierOrder
 # Create your models here.
 
 STATUS = (
@@ -82,7 +82,8 @@ class Transaction(models.Model):
     price = models.FloatField("Цена")
     created_at = models.DateTimeField("Дата",auto_now_add=True)
     order = models.ForeignKey(Order,verbose_name="Заказ", on_delete=models.CASCADE, blank=True, null=True)
-    
+    order_from_supplier = models.ForeignKey(SuplierOrder,verbose_name="Поставщик", on_delete=models.CASCADE, blank=True, null=True)
+
     def __str__(self):
         return f"{self.action} {self.product.name}, количество: {self.count}, цена: {self.price}"
 

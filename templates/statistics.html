@@ -3,6 +3,85 @@
 
 {% block body %}
 <div class="container my-5">
+    <div class="form-inline mb-2 d-flex justify-content-spacebetween">
+        <h2 class="w-100">Баланс - {{total_invested_today|floatformat:0}} cом</h2>
+
+        <select id="balanceLimitSelect" class="">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="all">Все</option>
+        </select>
+    </div>
+
+    <table class="table" id="balanceTable">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Катеория</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in sorted_products %}
+            <tr>
+                <td>{{p.name}}</td>
+                <td>{{p.category.name}}</td>
+                <td>{{p.count}}</td>
+                <td>{{p.invested_amount|floatformat:0}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="container my-5">
+      <div class="form-inline mb-2 d-flex justify-content-spacebetween">
+        <div class="w-100">
+            <h2>Оборудование</h2>
+            <p>Всего вложено в оборудование: {{ equipment_total_buy }} сом</p>
+            <p>Можно продать примерно за: {{ equipment_total_sell }} сом</p>
+        </div>
+        <select id="equipment_limit" style="height: 30px;">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="all">Все</option>
+        </select>
+    </div>
+
+
+    <table class="table" id="equipment_limit_table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Количество</th>
+                <th>Куплено за</th>
+                <th>Можно продать за</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in equipment_list %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.count }}</td>
+                <td>{{ item.buy_price }}</td>
+                <td>{{ item.sell_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="container my-5">
     <div class="my-2">
         <a href="?action=Уход{% if month %}&month={{month}}{% endif %}"
             class="mr-1 mb-1 btn btn-sm {% if action == 'Уход' %}btn-danger {% else %}btn-light{% endif %}">Продажи</a>
@@ -50,44 +129,31 @@
         </tbody>
     </table>
 </div>
+<script>
+    function initRowLimiter(selectId, tableId) {
+            const limitSelect = document.getElementById(selectId);
+            const tableRows = document.querySelectorAll(`#${tableId} tbody tr`);
 
-<div class="container my-5">
-    <div class="form-inline mb-2 d-flex justify-content-spacebetween">
-        <h2 class="w-100">Баланс - {{total_invested_today|floatformat:0}} cом</h2>
+            function updateVisibleRows() {
+                const limit = limitSelect.value;
+                tableRows.forEach((row, index) => {
+                    if (limit === 'all' || index < parseInt(limit)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
 
-        <select id="balanceLimitSelect" class="">
-            <option value="5" selected>5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="all">Все</option>
-        </select>
-    </div>
-
-    <table class="table" id="balanceTable">
-        <thead>
-            <tr>
-                <th>Название</th>
-                <th>Катеория</th>
-                <th>Количество</th>
-                <th>Сумма</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in sorted_products %}
-            <tr>
-                <td>{{p.name}}</td>
-                <td>{{p.category.name}}</td>
-                <td>{{p.count}}</td>
-                <td>{{p.invested_amount|floatformat:0}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-
+            limitSelect.addEventListener('change', updateVisibleRows);
+            updateVisibleRows(); // initial
+        }
+    document.addEventListener('DOMContentLoaded', function () {
+        initRowLimiter('balanceLimitSelect', 'balanceTable');
+        initRowLimiter('equipment_limit', 'equipment_limit_table');
+    });
+</script>
+{% if action == 'Уход' %}
 <div class="container my-5">
 
     <div class="form-inline mb-2 d-flex justify-content-spacebetween">
@@ -123,73 +189,14 @@
         </tbody>
     </table>
 </div>
-<div class="container my-5">
-      <div class="form-inline mb-2 d-flex justify-content-spacebetween">
-        <div class="w-100">
-            <h2>Оборудование</h2>
-            <p>Всего вложено в оборудование: {{ equipment_total_buy }} сом</p>
-            <p>Можно продать примерно за: {{ equipment_total_sell }} сом</p>
-        </div>
-        <select id="equipment_limit" style="height: 30px;">
-            <option value="5" selected>5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="all">Все</option>
-        </select>
-    </div>
 
-
-    <table class="table" id="equipment_limit_table">
-        <thead>
-            <tr>
-                <th>Название</th>
-                <th>Категория</th>
-                <th>Количество</th>
-                <th>Куплено за</th>
-                <th>Можно продать за</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in equipment_list %}
-            <tr>
-                <td>{{ item.name }}</td>
-                <td>{{ item.category }}</td>
-                <td>{{ item.count }}</td>
-                <td>{{ item.buy_price }}</td>
-                <td>{{ item.sell_price }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        function initRowLimiter(selectId, tableId) {
-            const limitSelect = document.getElementById(selectId);
-            const tableRows = document.querySelectorAll(`#${tableId} tbody tr`);
-
-            function updateVisibleRows() {
-                const limit = limitSelect.value;
-                tableRows.forEach((row, index) => {
-                    if (limit === 'all' || index < parseInt(limit)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            }
-
-            limitSelect.addEventListener('change', updateVisibleRows);
-            updateVisibleRows(); // initial
-        }
-
         initRowLimiter('recordLimit', 'transactionsTable');
-        initRowLimiter('balanceLimitSelect', 'balanceTable');
-        initRowLimiter('equipment_limit', 'equipment_limit_table');
-
-    });
+    
+    })
 </script>
+{% endif %}
+
 
 {% endblock %}

@@ -77,6 +77,7 @@ def services(request):
 def statistics(request):
     month = request.GET.get('month')
     action = request.GET.get('action', 'Уход')
+    
     # Общий фильтр по action и дате (если есть month)
     transaction_filter = Q(action=action)
     category_filter = Q(products__transaction__action=action)
@@ -105,11 +106,13 @@ def statistics(request):
         )
     ).order_by('-total_sales')
 
+    # Общая сумма
     total_by_category_top = total_by_category[:10]
     total_by_category_rest = sum(category.total_sales for category in total_by_category[10:] if category.total_sales)
 
     monthes = [date.strftime('%m.%Y') for date in Transaction.objects.dates('created_at', 'month', order='DESC')]
 
+    # Зарабаток
     products = Product.objects.filter(count__gt=0)
     total_invested_today = 0
 
@@ -119,7 +122,8 @@ def statistics(request):
 
     sorted_products = sorted(products, key=lambda p: p.invested_amount, reverse=True)
 
-    transactions = Transaction.objects.filter(action=Transaction.LEAVING)
+    transaction_filter &= Q(action=Transaction.LEAVING)
+    transactions = Transaction.objects.filter(transaction_filter)
     not_zero_transactions = []
     total_icnome = 0
 
@@ -131,6 +135,8 @@ def statistics(request):
     transactions = sorted(transactions, key=lambda t: t.income, reverse=True)
 
 
+
+    # Оборудование
     equipment_stats = Equipment.objects.aggregate(
         equipment_total_buy=Sum(F('buy_price') * F('count')),
         equipment_total_sell=Sum(F('sell_price') * F('count')),
