@@ -9,7 +9,7 @@ class Suplier(models.Model):
     profit = models.FloatField("Общая сумма выкупа",default=0,)
     telephone = models.PositiveBigIntegerField("номер телефона", blank=True, null=True)
     telephone2 =  models.PositiveBigIntegerField("номер телефона 2", blank=True, null=True)
-
+    categories = models.ManyToManyField('product.category', verbose_name='Категории')
     def __str__(self):
         return f"{self.telephone} - {self.first_name} {self.last_name}"
     
