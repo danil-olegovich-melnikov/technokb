@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import redirect
 from urllib.parse import urlencode
-
-from product.models import Category, Product, Transaction, ProductPhoto
+from product.models import Category, Product, Transaction, ProductPhoto, update_product_count
 from django.forms.models import BaseInlineFormSet
 
 

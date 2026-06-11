@@ -115,8 +115,9 @@ def update_product_count(instance):
             product.count -= transaction.count
             product.amount_of_transaction += 1     
 
-    product.average_price /= product.total_count 
-    product.average_price = round(product.average_price) 
+    if product.total_count:
+        product.average_price /= product.total_count 
+        product.average_price = round(product.average_price) 
     if product.count > 0:
         product.in_stock = "Да"
     else:
