@@ -4,7 +4,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.paginator import Paginator
 from django.db.models import F, Sum, ExpressionWrapper, Q, PositiveBigIntegerField
 from datetime import datetime, timedelta
-
+from django.db.models import (
+    Sum,
+    F,
+    ExpressionWrapper,
+    DecimalField,
+)
 from .models import Product, Category, ProductPhoto, Transaction
 from review.models import Review
 from .utils.balance import get_balance
@@ -75,9 +80,11 @@ def services(request):
 
 @staff_member_required
 def statistics(request):
+    # Получение данных
     month = request.GET.get('month')
     action = request.GET.get('action', 'Уход')
-    
+    monthes = [date.strftime('%m.%Y') for date in Transaction.objects.dates('created_at', 'month', order='DESC')]
+
     # Общий фильтр по action и дате (если есть month)
     transaction_filter = Q(action=action)
     category_filter = Q(products__transaction__action=action)
@@ -95,6 +102,8 @@ def statistics(request):
         )
     )['total'] or 0
 
+    
+
     # Продажи по категориям за период
     total_by_category = Category.objects.annotate(
         total_sales=Sum(
@@ -104,15 +113,13 @@ def statistics(request):
             ),
             filter=category_filter
         )
-    ).order_by('-total_sales')
+    ).order_by('-total_sales') # общая сумма
 
-    # Общая сумма
-    total_by_category_top = total_by_category[:10]
-    total_by_category_rest = sum(category.total_sales for category in total_by_category[10:] if category.total_sales)
+    total_by_category_top = total_by_category[:10] # 10 самых объемных категорий
+    total_by_category_rest = sum(category.total_sales for category in total_by_category[10:] if category.total_sales) # остальное
 
-    monthes = [date.strftime('%m.%Y') for date in Transaction.objects.dates('created_at', 'month', order='DESC')]
 
-    # Зарабаток
+    # Вложения
     products = Product.objects.filter(count__gt=0)
     total_invested_today = 0
 
@@ -122,18 +129,35 @@ def statistics(request):
 
     sorted_products = sorted(products, key=lambda p: p.invested_amount, reverse=True)
 
+    # Зарабаток
     transaction_filter &= Q(action=Transaction.LEAVING)
     transactions = Transaction.objects.filter(transaction_filter)
-    not_zero_transactions = []
-    total_icnome = 0
+    income_expr = ExpressionWrapper(
+        (F('price') - F('product__average_price')) * F('count'),
+        output_field=DecimalField()
+    )
 
-    for t in transactions:
-        t.income = t.get_income()
-        total_icnome += t.income
+    transactions = (
+        Transaction.objects
+        .filter(transaction_filter, action=Transaction.LEAVING)
+        .values(
+            'product_id',
+            'product__name',
+            'product__category__name',
+        )
+        .annotate(
+            total_count=Sum('count'),
+            income=Sum(income_expr),
+        )
+        .exclude(income=0)
+        .order_by('-income')
+    )
 
-    transactions = filter(lambda t: t.income != 0, transactions)
-    transactions = sorted(transactions, key=lambda t: t.income, reverse=True)
-
+    total_income = (
+    Transaction.objects
+        .filter(transaction_filter, action=Transaction.LEAVING)
+        .aggregate(total=Sum(income_expr))
+    )['total'] or 0
 
 
     # Оборудование

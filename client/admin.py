@@ -6,10 +6,12 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 class ClientAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', 'profit',)
+    readonly_fields = ('id', )
     search_fields = ('first_name','last_name', 'telephone')
-    list_display = ('telephone', 'first_name', 'last_name', 'profit', 'city')
+    list_display = ('telephone', 'first_name', 'last_name', 'city')
     autocomplete_fields = ['city',]
+    exclude = ('profit', )  
+
     class Meta:
         model = Client
 

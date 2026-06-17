@@ -15,12 +15,12 @@ class City(models.Model):
 
 
 class Client(models.Model):
-    first_name = models.CharField("Имя",max_length=100)
-    last_name = models.CharField("Фамилия", max_length=100)
+    first_name = models.CharField("Имя",max_length=100, blank=True, null=True)
+    last_name = models.CharField("Фамилия", max_length=100, blank=True, null=True)
     city = models.ForeignKey(City,on_delete=models.CASCADE, verbose_name="Место проживание")
     profit = models.FloatField("Общая сумма выкупа",default=0,)
-    telephone = models.PositiveBigIntegerField("номер телефона", blank=True, null=True)
-    telephone2 =  models.PositiveBigIntegerField("номер телефона 2", blank=True, null=True)
+    telephone = models.PositiveBigIntegerField("номер телефона", blank=True, null=True, unique=True)
+    telephone2 =  models.PositiveBigIntegerField("номер телефона 2", blank=True, null=True, unique=True)
     
     def __str__(self):
         return f"{self.telephone} - {self.first_name} {self.last_name}"

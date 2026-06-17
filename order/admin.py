@@ -7,6 +7,7 @@ from product.models import Transaction
 class TransactionAdmin(admin.TabularInline):
     model = Transaction   
     autocomplete_fields = ('product',) 
+    exclude = ('order_from_supplier', )
 
 
 class OrderAdmin(admin.ModelAdmin):
